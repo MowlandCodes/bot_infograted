@@ -6,6 +6,9 @@ import {
   makeCacheableSignalKeyStore,
   isJidBroadcast,
   Browsers,
+  isJidBot,
+  isJidGroup,
+  WAMessage,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
@@ -84,11 +87,32 @@ const startBot = async () => {
     }
   });
 
-  // Buat testing doang, ntar gua kembangin lagi biar lebih modular
   bot.ev.on("messages.upsert", async (msg) => {
-    logger.info(
-      `New message from ${msg.messages[0].key.fromMe ? "me" : msg.messages[0].key.remoteJid}: ${msg.messages[0]?.message?.extendedTextMessage?.text}`,
-    );
+    // Required properties
+
+    /** @type {WAMessage} */
+    const latestMessage = msg.messages[0];
+
+    /** @type {string?} */
+    const messageText =
+      latestMessage?.message?.extendedTextMessage?.text ||
+      latestMessage?.message?.conversation ||
+      latestMessage?.message?.imageMessage?.caption ||
+      latestMessage?.message?.videoMessage?.caption ||
+      null;
+
+    /** @type {string?} */
+    const senderJid =
+      latestMessage?.key?.remoteJid || latestMessage?.key?.participant || null;
+
+    /** @type {boolean} */
+    const isBot = isJidBot(senderJid);
+
+    /** @type {boolean} */
+    const isGroup = isJidGroup(senderJid);
+
+    /** @type {string?} */
+    const groupJid = isGroup ? senderJid : null;
   });
 };
 
