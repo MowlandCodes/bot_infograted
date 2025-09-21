@@ -1,0 +1,26 @@
+{
+  "name": "bot_infograted",
+  "version": "1.0.0",
+  "description": "Whatsapp Bot for Informatics Student of Integrated",
+  "keywords": [
+    "whatsapp_bot",
+    "bot",
+    "whatsapp",
+    "automation"
+  ],
+  "homepage": "https://github.com/MowlandCodes/bot_infograted#readme",
+  "bugs": {
+    "url": "https://github.com/MowlandCodes/bot_infograted/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MowlandCodes/bot_infograted.git"
+  },
+  "license": "UNLICENSED",
+  "author": "MowlandCodes",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
