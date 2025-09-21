@@ -1,0 +1,9 @@
+bot:
+  name: "Bot Infograted" # Bot Name
+  online: true # Make the bot online when running
+  commandPrefix: "!" # Command Prefix to give command to the bot
+  syncHistory: false # Sync message history
+
+logger:
+  level: "info"
+  logDir: "./logs"
