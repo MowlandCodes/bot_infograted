@@ -5,5 +5,5 @@ bot:
   syncHistory: false # Sync message history
 
 logger:
-  level: "info"
-  logDir: "./logs"
+  level: "info" # Logging level
+  logDir: "./logs" # Log directory name
