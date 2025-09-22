@@ -35,6 +35,8 @@
   },
   "imports": {
     "#utils": "./src/utils/index.js",
-    "#utils/*": "./src/utils/*.js"
+    "#utils/*": "./src/utils/*.js",
+    "#commands/*": "./src/commands/*.js",
+    "#types/*": "./src/types/*.d.ts"
   }
 }
