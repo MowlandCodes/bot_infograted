@@ -8,8 +8,6 @@ export const commandParser = async ({
   logger,
   senderJid,
   groupJid,
-  isGroup,
-  isBot,
 }) => {
   if (!text) {
     logger.error("No message text provided");
@@ -17,4 +15,23 @@ export const commandParser = async ({
   }
 
   // Tambahin Logic buat nge handle command dari text
+};
+
+/**
+ * @param {import("#types/parser").messageParser}
+ * @returns Promise<void>
+ */
+export const messageParser = async ({
+  bot,
+  text,
+  logger,
+  senderJid,
+  groupJid,
+}) => {
+  if (!text) {
+    logger.error("No message text provided");
+    return;
+  }
+
+  // Logic buat nge handle message biasa
 };
