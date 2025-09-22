@@ -8,6 +8,7 @@ import {
   Browsers,
   isJidBot,
   isJidGroup,
+  delay,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
@@ -16,12 +17,14 @@ import chalk from "chalk";
 
 import { question, logger, logInfo } from "#utils/logs";
 import { config } from "#utils/config";
+import { commandParser } from "#utils/parser";
 
 const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
 
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
 
 /**
+ * Start bot connection to Whatsapp
  * @returns {Promise<void>}
  */
 const startBot = async () => {
@@ -47,7 +50,7 @@ const startBot = async () => {
     markOnlineOnConnect: config.bot?.online || true,
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     syncFullHistory: config.bot?.syncHistory || false,
-    cache: async (jid) => groupMetadataCache.get(jid),
+    cachedGroupMetadata: async (jid) => groupMetadataCache.get(jid),
   });
 
   // Check connection, if not connected ask for phone number
@@ -77,7 +80,7 @@ const startBot = async () => {
       logger.info(`${config.bot?.name} Connected to Whatsapp!`);
     } else if (connection === "close") {
       const shouldReconnect =
-        (lastDisconnect.error instanceof Boom)?.output?.statusCode !==
+        (lastDisconnect?.error instanceof Boom)?.output?.statusCode !==
         DisconnectReason.loggedOut;
 
       logger.error(`Disconnected from Whatsapp: ${lastDisconnect.error}`);
@@ -99,14 +102,14 @@ const startBot = async () => {
     /** @type {string?} */
     const messageText =
       latestMessage?.message?.extendedTextMessage?.text ||
-      latestMessage?.message?.conversation ||
+      latestMessage?.message?.conversation.messages ||
       latestMessage?.message?.imageMessage?.caption ||
       latestMessage?.message?.videoMessage?.caption ||
       null;
 
-    /** @type {string?} */
+    /** @type {string} */
     const senderJid =
-      latestMessage?.key?.remoteJid || latestMessage?.key?.participant || null;
+      latestMessage?.key?.remoteJid || latestMessage?.key?.participant;
 
     /** @type {boolean} */
     const isBot = isJidBot(senderJid);
@@ -116,6 +119,25 @@ const startBot = async () => {
 
     /** @type {string?} */
     const groupJid = isGroup ? senderJid : null;
+
+    /** @type {boolean?} */
+    const isCommand = messageText
+      ?.toLowerCase()
+      ?.startsWith(config.bot?.commandPrefix || "!");
+
+    if (isCommand) {
+      // Parse command and execute function according to the command
+      commandParser({
+        bot,
+        text: message?.toLowerCase(),
+        logger,
+        senderJid,
+        groupJid,
+        isGroup,
+        isBot,
+      });
+    } else {
+    }
   });
 };
 
