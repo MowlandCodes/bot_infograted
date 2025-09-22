@@ -8,7 +8,6 @@ import {
   Browsers,
   isJidBot,
   isJidGroup,
-  WAMessage,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
@@ -22,6 +21,9 @@ const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
 
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
 
+/**
+ * @returns {Promise<void>}
+ */
 const startBot = async () => {
   const { version, isLatest } = await fetchLatestBaileysVersion();
   const { state, saveCreds } = await useMultiFileAuthState("./session");
@@ -84,6 +86,7 @@ const startBot = async () => {
 
       if (shouldReconnect) {
         logger.info("Reconnecting to Whatsapp...");
+        await delay(3000); // Delay for 3 seconds, to avoid rate limiting
         startBot();
       }
     }
