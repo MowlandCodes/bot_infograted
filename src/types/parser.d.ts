@@ -3,10 +3,16 @@ import { type Logger } from "pino";
 
 export type CommandParser = {
   bot: WASocket;
-  text?: string;
   logger: Logger;
   senderJid: string;
   groupJid: string;
-  isGroup: boolean;
-  isBot: boolean;
+  text?: string;
+};
+
+export type messageParser = {
+  bot: WASocket;
+  logger: Logger;
+  senderJid?: string;
+  groupJid?: string;
+  text?: string;
 };

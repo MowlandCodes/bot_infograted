@@ -1,26 +1,20 @@
 import {
   makeWASocket,
-  DisconnectReason,
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   makeCacheableSignalKeyStore,
   isJidBroadcast,
   Browsers,
-  isJidBot,
-  isJidGroup,
-  delay,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
-import { Boom } from "@hapi/boom";
 import chalk from "chalk";
 
 import { question, logger, logInfo } from "#utils/logs";
 import { config } from "#utils/config";
-import { commandParser } from "#utils/parser";
+import { handleConnectionUpdate, handleIncomingMessage } from "#utils/handlers";
 
 const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
-
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
 
 /**
@@ -70,75 +64,9 @@ const startBot = async () => {
   // Save credentials on update
   bot.ev.on("creds.update", saveCreds);
 
-  // Handle Connection update
-  bot.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect, qr } = update;
-
-    if (qr) {
-      logger.info("Using Pairing Code to connect to Whatsapp...");
-    } else if (connection === "open") {
-      logger.info(`${config.bot?.name} Connected to Whatsapp!`);
-    } else if (connection === "close") {
-      const shouldReconnect =
-        (lastDisconnect?.error instanceof Boom)?.output?.statusCode !==
-        DisconnectReason.loggedOut;
-
-      logger.error(`Disconnected from Whatsapp: ${lastDisconnect.error}`);
-
-      if (shouldReconnect) {
-        logger.info("Reconnecting to Whatsapp...");
-        await delay(3000); // Delay for 3 seconds, to avoid rate limiting
-        startBot();
-      }
-    }
-  });
-
-  bot.ev.on("messages.upsert", async (msg) => {
-    // Required properties
-
-    /** @type {import("baileys").WAMessage} */
-    const latestMessage = msg.messages[0];
-
-    /** @type {string?} */
-    const messageText =
-      latestMessage?.message?.extendedTextMessage?.text ||
-      latestMessage?.message?.conversation.messages ||
-      latestMessage?.message?.imageMessage?.caption ||
-      latestMessage?.message?.videoMessage?.caption ||
-      null;
-
-    /** @type {string} */
-    const senderJid =
-      latestMessage?.key?.remoteJid || latestMessage?.key?.participant;
-
-    /** @type {boolean} */
-    const isBot = isJidBot(senderJid);
-
-    /** @type {boolean} */
-    const isGroup = isJidGroup(senderJid);
-
-    /** @type {string?} */
-    const groupJid = isGroup ? senderJid : null;
-
-    /** @type {boolean?} */
-    const isCommand = messageText
-      ?.toLowerCase()
-      ?.startsWith(config.bot?.commandPrefix || "!");
-
-    if (isCommand) {
-      // Parse command and execute function according to the command
-      commandParser({
-        bot,
-        text: message?.toLowerCase(),
-        logger,
-        senderJid,
-        groupJid,
-        isGroup,
-        isBot,
-      });
-    } else {
-    }
-  });
+  // Handlers
+  await handleIncomingMessage({ bot, logger });
+  await handleConnectionUpdate({ bot, logger });
 };
 
 startBot();
