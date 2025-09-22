@@ -28,8 +28,10 @@ const startBot = async () => {
 
   console.log(
     logInfo(
-      `Using baileys v${version.join(".")} ${isLatest ? chalk.green("(latest)") : chalk.red("(outdated)")}`,
-    ) + "\n",
+      `Using baileys v${version.join(".")} ${
+        isLatest ? chalk.green("(latest)") : chalk.red("(outdated)")
+      }`
+    ) + "\n"
   );
 
   const bot = makeWASocket({
@@ -51,7 +53,7 @@ const startBot = async () => {
   // Check connection, if not connected ask for phone number
   if (!bot.authState.creds.registered) {
     const phoneNumber = await question(
-      logInfo("Enter your phone number (format: 628xxxxxxxxxxx) => "),
+      logInfo("Enter your phone number (format: 628xxxxxxxxxxx) => ")
     );
 
     setTimeout(async () => {
@@ -90,7 +92,7 @@ const startBot = async () => {
   bot.ev.on("messages.upsert", async (msg) => {
     // Required properties
 
-    /** @type {WAMessage} */
+    /** @type {import("baileys".WAMessage)} */
     const latestMessage = msg.messages[0];
 
     /** @type {string?} */
