@@ -4,6 +4,9 @@ bot:
   commandPrefix: "!" # Command Prefix to give command to the bot
   syncHistory: false # Sync message history
 
+rules:
+  validGroups: ["group1", "group2"] # Valid group to receive message from
+
 logger:
   level: "info" # Logging level
   logDir: "./logs" # Log directory name

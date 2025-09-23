@@ -1,29 +1,24 @@
 import {
   makeWASocket,
-  DisconnectReason,
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   makeCacheableSignalKeyStore,
   isJidBroadcast,
   Browsers,
-  isJidBot,
-  isJidGroup,
-  delay,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
-import { Boom } from "@hapi/boom";
 import chalk from "chalk";
 
 import { question, logger, logInfo } from "#utils/logs";
 import { config } from "#utils/config";
+import { handleConnectionUpdate, handleIncomingMessage } from "#utils/handlers";
 
 const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
-
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
 
 /**
- * @param {number} ms
+ * Start bot connection to Whatsapp
  * @returns {Promise<void>}
  */
 
@@ -52,7 +47,7 @@ const startBot = async () => {
     markOnlineOnConnect: config.bot?.online || true,
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     syncFullHistory: config.bot?.syncHistory || false,
-    cache: async (jid) => groupMetadataCache.get(jid),
+    cachedGroupMetadata: async (jid) => groupMetadataCache.get(jid),
   });
 
   // Check connection, if not connected ask for phone number
@@ -98,7 +93,7 @@ const startBot = async () => {
   bot.ev.on("messages.upsert", async (msg) => {
     // Required properties
 
-    /** @type {import("baileys".WAMessage)} */
+    /** @type {import("baileys").WAMessage} */
     const latestMessage = msg.messages[0];
 
     /** @type {string?} */
