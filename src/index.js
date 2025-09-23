@@ -8,6 +8,7 @@ import {
   Browsers,
   isJidBot,
   isJidGroup,
+  delay,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
@@ -22,8 +23,11 @@ const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
 
 /**
+ * @param {number} ms
  * @returns {Promise<void>}
  */
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const startBot = async () => {
   const { version, isLatest } = await fetchLatestBaileysVersion();
   const { state, saveCreds } = await useMultiFileAuthState("./session");
