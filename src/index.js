@@ -27,7 +27,6 @@ const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
  * @returns {Promise<void>}
  */
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const startBot = async () => {
   const { version, isLatest } = await fetchLatestBaileysVersion();
   const { state, saveCreds } = await useMultiFileAuthState("./session");
