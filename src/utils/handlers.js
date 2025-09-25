@@ -85,7 +85,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     // 1. Dateng dari grup yang valid
     // 2. Bot harus di mention
     // 3. Command harus valid
-    if (isCommand /* && isBotMentioned  */ && isValidGroup) {
+    if (isCommand && isValidGroup) {
       // Parse command and execute function according to the command
       await commandParser({
         bot,
