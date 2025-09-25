@@ -5,7 +5,7 @@ bot:
   syncHistory: false # Sync message history
 
 rules:
-  validGroups: ["group1", "group2"] # Valid group to receive message from
+  validGroups: ["Bot Infograted", "informatika integrated💻"] # Valid group to receive message from
 
 logger:
   level: "info" # Logging level

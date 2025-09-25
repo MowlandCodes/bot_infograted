@@ -2,6 +2,7 @@ import yaml from "js-yaml";
 import { readFileSync } from "fs";
 import { logError } from "#utils/logs";
 
+/** @type {import("#types/config").Config} */
 export let config = {};
 
 try {
