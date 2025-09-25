@@ -64,7 +64,7 @@ export const startBot = async () => {
   // Save credentials on update
   bot.ev.on("creds.update", saveCreds);
 
-  // Handlers
+  // Handlers instead of events
   await handleIncomingMessage({ bot, logger });
   await handleConnectionUpdate({ bot, logger });
 };
