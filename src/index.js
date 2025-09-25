@@ -68,56 +68,9 @@ export const startBot = async () => {
   // Save credentials on update
   bot.ev.on("creds.update", saveCreds);
 
-  // Handle Connection update
-  bot.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect, qr } = update;
-
-    if (qr) {
-      logger.info("Using Pairing Code to connect to Whatsapp...");
-    } else if (connection === "open") {
-      logger.info(`${config.bot?.name} Connected to Whatsapp!`);
-    } else if (connection === "close") {
-      const shouldReconnect =
-        (lastDisconnect.error instanceof Boom)?.output?.statusCode !==
-        DisconnectReason.loggedOut;
-
-      logger.error(`Disconnected from Whatsapp: ${lastDisconnect.error}`);
-
-      if (shouldReconnect) {
-        logger.info("Reconnecting to Whatsapp...");
-        await delay(3000); // Delay for 3 seconds, to avoid rate limiting
-        startBot();
-      }
-    }
-  });
-
-  bot.ev.on("messages.upsert", async (msg) => {
-    // Required properties
-
-    /** @type {import("baileys").WAMessage} */
-    const latestMessage = msg.messages[0];
-
-    /** @type {string?} */
-    const messageText =
-      latestMessage?.message?.extendedTextMessage?.text ||
-      latestMessage?.message?.conversation ||
-      latestMessage?.message?.imageMessage?.caption ||
-      latestMessage?.message?.videoMessage?.caption ||
-      null;
-
-    /** @type {string?} */
-    const senderJid =
-      latestMessage?.key?.remoteJid || latestMessage?.key?.participant || null;
-
-    /** @type {boolean} */
-    const isBot = isJidBot(senderJid);
-
-    /** @type {boolean} */
-    const isGroup = isJidGroup(senderJid);
-
-    /** @type {string?} */
-    const groupJid = isGroup ? senderJid : null;
-  });
+  // Handlers instead of events
+  await handleIncomingMessage({ bot, logger });
+  await handleConnectionUpdate({ bot, logger });
 };
 
 startBot();
