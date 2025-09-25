@@ -1,6 +1,7 @@
 import { isJidBot, isJidGroup, DisconnectReason, delay } from "baileys";
 import { Boom } from "@hapi/boom";
 
+import { startBot } from "#src/index";
 import { config } from "#utils/config";
 import { commandParser, messageParser } from "#utils/parser";
 

@@ -21,7 +21,7 @@ const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
  * Start bot connection to Whatsapp
  * @returns {Promise<void>}
  */
-const startBot = async () => {
+export const startBot = async () => {
   const { version, isLatest } = await fetchLatestBaileysVersion();
   const { state, saveCreds } = await useMultiFileAuthState("./session");
 
