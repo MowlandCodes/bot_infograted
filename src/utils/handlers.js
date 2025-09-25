@@ -77,15 +77,14 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     //   return; // Ignore message from yourself
     // }
 
-    logger.info(
-      `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
-    );
-
     // Command di terima kalo:
     // 1. Dateng dari grup yang valid
     // 2. Bot harus di mention
     // 3. Command harus valid
     if (isCommand && isValidGroup) {
+      logger.info(
+        `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
+      );
       // Parse command and execute function according to the command
       await commandParser({
         bot,
@@ -98,6 +97,9 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     // Message di terima kalo:
     // 1. Dateng dari grup yang valid
     else if (isValidGroup) {
+      logger.info(
+        `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
+      );
       await messageParser({
         bot,
         text: messageText ? messageText : "",
