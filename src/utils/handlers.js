@@ -16,16 +16,16 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     /** @type {import("baileys").WAMessage} */
     const latestMessage = messages[0];
 
-    /** @type {string?} */
+    /** @type {string} */
     const messageText =
       latestMessage?.message?.extendedTextMessage?.text ||
-      latestMessage?.message?.conversation.messages ||
+      latestMessage?.message?.conversation ||
       latestMessage?.message?.imageMessage?.caption ||
       latestMessage?.message?.videoMessage?.caption ||
-      null;
+      "";
 
-    /** @type {string?} */
-    const botJid = bot.user?.id;
+    /** @type {string} */
+    const botJid = bot.user?.lid;
 
     /** @type {string} */
     const senderJid =
@@ -50,7 +50,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
 
     /** @type {boolean} */
     const isValidGroup =
-      isGroup && config.rules?.validGroups.includes(groupJid);
+      isGroup && config.rules?.validGroups.includes(groupName);
 
     // Contoh command yang valid
     // <commandPrefix>help @bot
@@ -72,31 +72,37 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
       return; // Ignore message from bot
     }
 
-    if (isFromMe) {
-      logger.warn("Received message from yourself, ignoring...");
-      return; // Ignore message from yourself
-    }
+    // if (isFromMe) {
+    //   logger.warn("Received message from yourself, ignoring...");
+    //   return; // Ignore message from yourself
+    // }
+
+    logger.info(
+      `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
+    );
 
     // Command di terima kalo:
     // 1. Dateng dari grup yang valid
     // 2. Bot harus di mention
     // 3. Command harus valid
-    if (isCommand && isGroup && isBotMentioned && isValidGroup) {
+    if (isCommand /* && isBotMentioned  */ && isValidGroup) {
       // Parse command and execute function according to the command
       await commandParser({
         bot,
         text: messageText?.toLowerCase(),
         logger,
         senderJid,
-        groupJid,
       });
-    } else {
+    }
+
+    // Message di terima kalo:
+    // 1. Dateng dari grup yang valid
+    else if (isValidGroup) {
       await messageParser({
         bot,
         text: messageText ? messageText : "",
         logger,
         senderJid,
-        groupJid,
       });
     }
   });
