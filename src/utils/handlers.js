@@ -36,6 +36,9 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     /** @type {boolean} */
     const isGroup = isJidGroup(senderJid);
 
+    /** @type {boolean} */
+    const isFromMe = latestMessage.key?.fromMe;
+
     /** @type {string?} */
     const groupJid = isGroup ? senderJid : null;
 
@@ -43,6 +46,14 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     const groupName = isGroup
       ? (await bot.groupMetadata(groupJid)).subject
       : null;
+
+    /** @type {boolean} */
+    const isValidGroup =
+      isGroup && config.rules?.validGroups.includes(groupJid);
+
+    // Contoh command yang valid
+    // <commandPrefix>help @bot
+    // ex: !help @bot (Bot harus di mention/tag)
 
     /** @type {boolean?} */
     const isCommand = messageText
@@ -60,11 +71,16 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
       return; // Ignore message from bot
     }
 
+    if (isFromMe) {
+      logger.warn("Received message from yourself, ignoring...");
+      return; // Ignore message from yourself
+    }
+
     // Command di terima kalo:
     // 1. Dateng dari grup yang valid
     // 2. Bot harus di mention
     // 3. Command harus valid
-    if (isCommand) {
+    if (isCommand && isGroup && isBotMentioned && isValidGroup) {
       // Parse command and execute function according to the command
       await commandParser({
         bot,
