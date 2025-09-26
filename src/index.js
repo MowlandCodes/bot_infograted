@@ -66,8 +66,8 @@ export const startBot = async () => {
   bot.ev.on("creds.update", saveCreds);
 
   // Handlers instead of events
-  await handleIncomingMessage({ bot, logger });
-  await handleConnectionUpdate({ bot, logger });
+  handleIncomingMessage({ bot, logger });
+  handleConnectionUpdate({ bot, logger });
 };
 
 startBot();
