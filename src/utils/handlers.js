@@ -4,6 +4,29 @@ import { Boom } from "@hapi/boom";
 import { startBot } from "#src/index";
 import { config } from "#utils/config";
 import { commandParser, messageParser } from "#utils/parser";
+import NodeCache from "node-cache";
+
+// Cache untuk metadata grup
+const groupCache = new NodeCache({ stdTTL: 60 * 5 }); // Time to live nya 5 menit
+
+/**
+ * Ambil nama grup dengan cache (biar gak spam request ke WA)
+ * @param {import("baileys").WASocket} bot
+ * @param {string} groupJid
+ * @returns {Promise<string>}
+ */
+async function getGroupName(bot, groupJid) {
+  if (groupCache.has(groupJid)) {
+    return groupCache.get(groupJid);
+  }
+
+  const metadata = await bot.groupMetadata(groupJid);
+  const subject = metadata.subject;
+
+  groupCache.set(groupJid, subject);
+
+  return subject;
+}
 
 /**
  * @param {import("#types/handlers").Handler}
@@ -52,9 +75,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     const groupJid = isGroup ? senderJid : null;
 
     /** @type {string?} */
-    const groupName = isGroup
-      ? (await bot.groupMetadata(groupJid)).subject
-      : null;
+    const groupName = isGroup ? await getGroupName(bot, groupJid) : null;
 
     /** @type {boolean} */
     const isValidGroup =
