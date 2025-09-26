@@ -24,8 +24,16 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
       latestMessage?.message?.videoMessage?.caption ||
       "";
 
-    /** @type {string} */
-    const botJid = bot.user?.lid;
+    /** @type {`${string}@s.whatsapp.net` | null} */
+    const botJid = bot.authState?.creds?.me?.id
+      ? bot.authState?.creds?.me?.id?.split("@")[0].split(":")[0] +
+      "@s.whatsapp.net"
+      : null;
+
+    /** @type {`${string}@lid` | null} */
+    const botLid = bot.authState?.creds?.lid
+      ? bot.authState?.creds?.lid?.split("@")[0].split(":")[0] + "@lid"
+      : null;
 
     /** @type {string} */
     const senderJid =
@@ -65,13 +73,17 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     const isBotMentioned =
       latestMessage?.message?.extendedTextMessage?.contextInfo?.mentionedJid.includes(
         botJid,
-      );
+      ) ||
+      latestMessage?.message?.extendedTextMessage?.contextInfo?.mentionedJid.includes(
+        botLid,
+      ); // Mention nya bisa pake JID atau LID
 
     if (isBot) {
       logger.warn("Received message from a bot, ignoring...");
       return; // Ignore message from bot
     }
 
+    // Jangan di pake dulu buat development sekarang... Ntar aja pas udh mau release
     // if (isFromMe) {
     //   logger.warn("Received message from yourself, ignoring...");
     //   return; // Ignore message from yourself
@@ -81,7 +93,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     // 1. Dateng dari grup yang valid
     // 2. Bot harus di mention
     // 3. Command harus valid
-    if (isCommand && isValidGroup) {
+    if (isCommand && isValidGroup /* && isBotMentioned */) {
       logger.info(
         `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
       );

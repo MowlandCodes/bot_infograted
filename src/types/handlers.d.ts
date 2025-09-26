@@ -6,6 +6,6 @@ export type Handler = { bot: WASocket; logger: Logger };
 export type CommandHandler = {
   bot: WASocket;
   logger: Logger;
-  senderJid: `${string}@s.whatsapp.net` | `${string}@g.us`;
+  senderJid: `${number}@s.whatsapp.net` | `${number}@g.us`;
   text: string;
 };

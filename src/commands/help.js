@@ -45,15 +45,13 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 │
 │ 3. *HARGAI SATU SAMA LAIN*. Mau sepuh, mau newbie, semua sama. Tapi kalo pertanyaan lu bisa di - Google dalam 5 detik, siap - siap aja di - roasting.
 │
-│ 4. *JANGAN KIRIM LINK ANEH - ANEH*. Phishing, judi online, apalagi pinjol. Sekali kirim, langsung \`rm - rf\` (you know what i mean...) dari grup.
+│ 4. *JANGAN KIRIM LINK ANEH - ANEH*. Phishing, judi online, apalagi pinjol. Sekali kirim, langsung \`rm -rf\` (you know what i mean...) dari grup.
 │
-╰─╌「 📜 *Patuhi atau terima konsekuensi nya* 📜 」╌─╯
+╰─╌「 📜 *Patuhi atau _terima konsekuensi_ nya* 📜 」╌─╯
 
 ›────────── ⋆⋅☆⋅⋆ ──────────‹
 
-> 
 > Udah, gitu doang. Kalo masih bingung juga, mending lu *uninstall WhatsApp aja*.
-> 
 
 * *Bot by MowlandCodes, Shahansyah, Angga | Informatika Integrated 💻*
 * *v1.0.0 - "Kenapa harus mudah jika bisa dipersulit? 😉"*
