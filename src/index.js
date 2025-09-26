@@ -26,9 +26,10 @@ export const startBot = async () => {
 
   console.log(
     logInfo(
-      `Using baileys v${version.join(".")} ${isLatest ? chalk.green("(latest)") : chalk.red("(outdated)")
-      }`,
-    ) + "\n",
+      `Using baileys v${version.join(".")} ${
+        isLatest ? chalk.green("(latest)") : chalk.red("(outdated)")
+      }`
+    ) + "\n"
   );
 
   const bot = makeWASocket({
@@ -41,9 +42,9 @@ export const startBot = async () => {
     browser: Browsers.ubuntu("Firefox"),
     msgRetryCounterCache,
     generateHighQualityLinkPreview: true,
-    markOnlineOnConnect: config.bot?.online || true,
+    markOnlineOnConnect: config.bot?.online ?? true,
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
-    syncFullHistory: config.bot?.syncHistory || false,
+    syncFullHistory: config.bot?.syncHistory ?? false,
     cachedGroupMetadata: async (jid) => groupMetadataCache.get(jid),
   });
 
