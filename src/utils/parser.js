@@ -1,5 +1,6 @@
 import { commandHelp } from "#commands/help";
 import { config } from "#utils/config";
+import { sendDailyQuote } from "#utils/quotes";
 
 /**
  * @param {import("#types/parser").CommandParser}

@@ -7,13 +7,20 @@ const quotes = [
 ];
 
 // Fungsi ambil random quote
-export function getRandomQuote() {
+function getRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   return quotes[randomIndex];
 }
 
 // Fungsi kirim quotes ke grup
+/**
+ * @param {import("baileys").WASocket} bot
+ * @param {string} groupJid
+ * @returns {Promise<void>}
+ */
 export async function sendDailyQuote(bot, groupJid) {
   const quote = getRandomQuote();
-  await bot.sendMessage(groupJid, { text: `🌟 Daily Quote 🌟\n\n"${quote}"` });
+  await bot.sendMessage(groupJid, {
+    text: `🌟 Daily Quote 🌟\n\n*"${quote}"*`,
+  });
 }
