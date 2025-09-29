@@ -1,6 +1,10 @@
 import { commandHelp } from "#commands/help";
+import { commandTagAll } from "#commands/tag_all";
 import { config } from "#utils/config";
 import { sendDailyQuote } from "#utils/quotes";
+
+// ✅ simpan cooldown biar gak spam
+const cooldowns = new Map();
 
 /**
  * @param {import("#types/parser").CommandParser}
@@ -12,36 +16,54 @@ export const commandParser = async ({ bot, text, logger, senderJid }) => {
     return;
   }
 
-  // Tambahin Logic buat nge handle command dari text
-  // ex: !help @bot
-  const command = text.split(" ")[0].slice(config.bot.commandPrefix.length); // Ngilangin command prefix dari text command nya
+  const command = text.split(" ")[0].slice(config.bot.commandPrefix.length);
 
   switch (command) {
     case "help":
       await commandHelp({ bot, text, logger, senderJid });
       break;
+
+    case "tagall":
+      await commandTagAll({ bot, text, logger, senderJid });
+      break;
+
     default:
       logger.error(`Command ${command} not found yet...`);
       break;
   }
-
-  return;
 };
 
 /**
  * @param {import("#types/parser").messageParser}
  * @returns Promise<void>
  */
-export const messageParser = async ({ bot, text, logger, senderJid }) => {
+export const messageParser = async ({
+  bot,
+  text,
+  logger,
+  senderJid,
+  remoteJid,
+}) => {
   if (!text) {
     logger.error("No text message provided");
     return;
   }
 
+  // ✅ Auto-detect @everyone tapi ada cooldown
   if (text.includes("@everyone")) {
-    logger.info("Message contains @everyone, mentioning all users...");
-    await commandTagAll({ bot, text, logger, senderJid });
-  }
+    const key = `${remoteJid}`; // cooldown per grup
+    const now = Date.now();
+    const lastUsed = cooldowns.get(key) || 0;
 
-  // Logic buat nge handle message biasa
+    if (now - lastUsed < 30_000) {
+      // 30 detik
+      logger.warn("Tag all ignored: still on cooldown");
+      return;
+    }
+
+    cooldowns.set(key, now);
+
+    logger.info("Message contains @everyone, mentioning all users...");
+    await commandTagAll({ bot, text, logger, senderJid, remoteJid });
+  }
 };
