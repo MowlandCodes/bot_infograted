@@ -1,4 +1,4 @@
-import { type WASocket } from "baileys";
+import { type WASocket, type WAMessage } from "baileys";
 import { type Logger } from "pino";
 
 export type Handler = { bot: WASocket; logger: Logger };
@@ -8,6 +8,7 @@ export type CommandHandler = {
   logger: Logger;
   senderJid: `${number}@s.whatsapp.net` | `${number}@g.us`;
   text: string;
+  messageObj?: WAMessage;
 };
 
 export type SendDailyQuotes = {

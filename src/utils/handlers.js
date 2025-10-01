@@ -123,6 +123,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
         text: messageText?.toLowerCase(),
         logger,
         senderJid,
+        messageObj: latestMessage,
       });
     }
 
@@ -137,6 +138,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
         text: messageText ? messageText : "",
         logger,
         senderJid,
+        messageObj: latestMessage,
       });
     }
   });

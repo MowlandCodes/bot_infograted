@@ -9,7 +9,13 @@ const cooldowns = new NodeCache({ stdTTL: 60 });
  * @param {import("#types/parser").CommandParser}
  * @returns Promise<void>
  */
-export const commandParser = async ({ bot, text, logger, senderJid }) => {
+export const commandParser = async ({
+  bot,
+  text,
+  logger,
+  senderJid,
+  messageObj,
+}) => {
   if (!text) {
     logger.error("No message text provided");
     return;
@@ -23,7 +29,7 @@ export const commandParser = async ({ bot, text, logger, senderJid }) => {
       break;
 
     case "tagall":
-      await commandTagAll({ bot, text, logger, senderJid });
+      await commandTagAll({ bot, text, logger, senderJid, messageObj });
       break;
 
     default:
@@ -36,7 +42,13 @@ export const commandParser = async ({ bot, text, logger, senderJid }) => {
  * @param {import("#types/parser").messageParser}
  * @returns Promise<void>
  */
-export const messageParser = async ({ bot, text, logger, senderJid }) => {
+export const messageParser = async ({
+  bot,
+  text,
+  logger,
+  senderJid,
+  messageObj,
+}) => {
   if (!text) {
     logger.error("No text message provided");
     return;
@@ -60,6 +72,6 @@ export const messageParser = async ({ bot, text, logger, senderJid }) => {
     cooldowns.set(key, now);
 
     logger.info("Message contains @everyone, mentioning all users...");
-    await commandTagAll({ bot, logger, senderJid });
+    await commandTagAll({ bot, logger, senderJid, messageObj });
   }
 };
