@@ -1,10 +1,10 @@
 import { commandHelp } from "#commands/help";
 import { commandTagAll } from "#commands/tag_all";
 import { config } from "#utils/config";
+import NodeCache from "node-cache";
 import { sendDailyQuote } from "#utils/quotes";
 
-// ✅ simpan cooldown biar gak spam
-const cooldowns = new Map();
+const cooldowns = new NodeCache({ stdTTL: 60 });
 
 /**
  * @param {import("#types/parser").CommandParser}
@@ -37,33 +37,30 @@ export const commandParser = async ({ bot, text, logger, senderJid }) => {
  * @param {import("#types/parser").messageParser}
  * @returns Promise<void>
  */
-export const messageParser = async ({
-  bot,
-  text,
-  logger,
-  senderJid,
-  remoteJid,
-}) => {
+export const messageParser = async ({ bot, text, logger, senderJid }) => {
   if (!text) {
     logger.error("No text message provided");
     return;
   }
 
-  // ✅ Auto-detect @everyone tapi ada cooldown
   if (text.includes("@everyone")) {
-    const key = `${remoteJid}`; // cooldown per grup
+    const key = senderJid; // cooldown per grup
     const now = Date.now();
     const lastUsed = cooldowns.get(key) || 0;
 
     if (now - lastUsed < 30_000) {
       // 30 detik
       logger.warn("Tag all ignored: still on cooldown");
+      await bot.sendMessage(senderJid, {
+        text: "⚠️ *Tag all ignored*: _still on cooldown_ ⚠️",
+      });
       return;
     }
 
+    // Caching cooldown
     cooldowns.set(key, now);
 
     logger.info("Message contains @everyone, mentioning all users...");
-    await commandTagAll({ bot, text, logger, senderJid, remoteJid });
+    await commandTagAll({ bot, logger, senderJid });
   }
 };

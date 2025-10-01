@@ -10,7 +10,7 @@ export const commandTagAll = async ({ bot, senderJid, logger }) => {
     const mentions = participants.map((p) => p.id);
 
     await bot.sendMessage(senderJid, {
-      text: " 🔊 @everyone 🔊",
+      text: "🔊 *Summoning all group Members...* 🔊",
       mentions,
     });
 

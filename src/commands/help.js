@@ -20,18 +20,18 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 ╭─╌「 📜 *DAFTAR PERINTAH* 」╌─╮
 │
 │ 🤖 *Umum*
-│   ├ • \`${config.bot.commandPrefix}help\` - Nampilin pesan ini lagi(buat yang memorinya setara RAM 128MB).
-│   ├ • \`${config.bot.commandPrefix}ping\` - Cek latency bot ke server, biar tau seberapa cepet bot ini ngabaikan lu.
-│   ├ • \`${config.bot.commandPrefix}owner\` - Ngasih tau siapa majikan bot ini yang harus lu salahin kalo ada error.
+│   ├ • \`${config.bot.commandPrefix}help\` ✅ - Nampilin pesan ini lagi(buat yang memorinya setara RAM 128MB).
+│   ├ • \`${config.bot.commandPrefix}tagall\` ✅ - Men-tag seluruh anggota grup.
+│   ├ • \`${config.bot.commandPrefix}owner\` ❌ - Ngasih tau siapa majikan bot ini yang harus lu salahin kalo ada error.
 │  
 │ 🛠️ *Tools & Utility*
-│   ├ • \`${config.bot.commandPrefix}ytmp3 [link]\` - Download audio dari YouTube.
-│   ├ • \`${config.bot.commandPrefix}ytmp4 [link]\` - Download video dari YouTube.
+│   ├ • \`${config.bot.commandPrefix}ytmp3 [link]\` ❌ - Download audio dari YouTube.
+│   ├ • \`${config.bot.commandPrefix}ytmp4 [link]\` ❌ - Download video dari YouTube.
 │  
 │ 🖥️ *Khusus Anak IT*
-│   ├ • \`${config.bot.commandPrefix}nmap [host]\` - Nge - scan port target, jangan dipake buat yang aneh - aneh, dosa tanggung sendiri.
-│   ├ • \`${config.bot.commandPrefix}whois [domain]\` - Stalking informasi domain orang.
-│   ├ • \`${config.bot.commandPrefix}cve [CVE - ID]\` - Nyari detail kerentanan. Biar keliatan pinter dikit.
+│   ├ • \`${config.bot.commandPrefix}nmap [host]\` ❌ - Nge - scan port target, jangan dipake buat yang aneh - aneh, dosa tanggung sendiri.
+│   ├ • \`${config.bot.commandPrefix}whois [domain]\` ❌ - Stalking informasi domain orang.
+│   ├ • \`${config.bot.commandPrefix}cve [CVE - ID]\` ❌ - Nyari detail kerentanan. Biar keliatan pinter dikit.
 │  
 ╰─╌「 ✨ Command Lainnya Cek Sendiri ✨ 」╌─╯
 
