@@ -1,26 +1,67 @@
-// src/utils/quotes.js
-
-// Kumpulan quotes
-const quotes = [
-  "Jangan menyerah, setiap langkah kecil membawa kita lebih dekat ke tujuan.",
-  "Kesuksesan adalah hasil dari usaha yang konsisten, bukan keberuntungan semata.",
-];
+import { schedule } from "node-cron";
+import { validGroups } from "#utils/config";
+import axios from "axios";
+import align from "align-text";
 
 // Fungsi ambil random quote
-function getRandomQuote() {
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
+async function getRandomQuote() {
+  const quotesUrl = "http://api.quotable.io";
+
+  const quotes = await axios({
+    method: "GET",
+    url: `${quotesUrl}/quotes/random`,
+    responseType: "json",
+  });
+
+  return { content: quotes.data[0].content, author: quotes.data[0].author };
+}
+
+function centerAlign(len, longest, line, lines) {
+  return 4 + Math.floor((longest - len) / 2);
 }
 
 // Fungsi kirim quotes ke grup
 /**
- * @param {import("baileys").WASocket} bot
- * @param {string} groupJid
+ * @param {import("#types/handlers").SendDailyQuotes}
  * @returns {Promise<void>}
  */
-export async function sendDailyQuote(bot, groupJid) {
-  const quote = getRandomQuote();
+async function sendDailyQuote({ bot, groupJid, logger }) {
+  const { content, author } = await getRandomQuote();
+
+  logger.info("Sending daily quote to group...");
+
+  const quotesContent = align(`*${content}*\n\n~ _${author}_ ~`, centerAlign);
+
+  const quotesTemplate = `
+· · ─────── ❖ ─────── · ·
+ ✨ *Petuah Hari Ini* ✨
+
+${quotesContent} ❞
+
+· · ─────── ❖ ─────── · ·
+
+> Semoga tercerahkan.
+> Atau setidaknya, terhibur sesaat
+> sebelum kembali ke realita yang fana ini.`;
+
   await bot.sendMessage(groupJid, {
-    text: `🌟 Daily Quote 🌟\n\n*"${quote}"*`,
+    text: quotesTemplate,
   });
+}
+
+/**
+ * @param {import("#types/handlers").DailyQuotes}
+ * @returns {void}
+ */
+export function doDailyQuotes({ bot, logger }) {
+  for (const [groupJid, groupName] of Object.entries(validGroups)) {
+    logger.info(`Scheduling daily quote for group: ${groupName}`);
+    schedule(
+      "*/1 * * * *",
+      async () => await sendDailyQuote({ bot, groupJid, logger }),
+      {
+        timezone: "Asia/Jakarta",
+      },
+    );
+  }
 }

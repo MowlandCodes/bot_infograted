@@ -5,6 +5,7 @@ import {
   makeCacheableSignalKeyStore,
   isJidBroadcast,
   Browsers,
+  delay,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";
@@ -12,6 +13,7 @@ import chalk from "chalk";
 import { question, logger, logInfo } from "#utils/logs";
 import { config } from "#utils/config";
 import { handleConnectionUpdate, handleIncomingMessage } from "#utils/handlers";
+import { doDailyQuotes } from "#utils/quotes";
 
 const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
@@ -66,8 +68,15 @@ export const startBot = async () => {
   bot.ev.on("creds.update", saveCreds);
 
   // Handlers instead of events
-  handleIncomingMessage({ bot, logger });
   handleConnectionUpdate({ bot, logger });
+  handleIncomingMessage({ bot, logger });
+
+  // Daily Quotes
+  // doDailyQuotes({ bot, logger });
+  await delay(5000);
+  await bot.sendMessage("120363404034113965@g.us", {
+    text: "=================================",
+  });
 };
 
 startBot();

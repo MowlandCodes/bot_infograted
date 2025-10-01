@@ -2,7 +2,7 @@ import { isJidBot, isJidGroup, DisconnectReason, delay } from "baileys";
 import { Boom } from "@hapi/boom";
 
 import { startBot } from "#src/index";
-import { config } from "#utils/config";
+import { config, validGroups } from "#utils/config";
 import { commandParser, messageParser } from "#utils/parser";
 import NodeCache from "node-cache";
 
@@ -78,8 +78,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     const groupName = isGroup ? await getGroupName(bot, groupJid) : null;
 
     /** @type {boolean} */
-    const isValidGroup =
-      isGroup && config.rules?.validGroups.includes(groupName);
+    const isValidGroup = isGroup && groupJid in validGroups;
 
     // Contoh command yang valid
     // <commandPrefix>help @bot

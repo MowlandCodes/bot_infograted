@@ -9,3 +9,14 @@ export type CommandHandler = {
   senderJid: `${number}@s.whatsapp.net` | `${number}@g.us`;
   text: string;
 };
+
+export type SendDailyQuotes = {
+  bot: WASocket;
+  logger: Logger;
+  groupJid: `${number}@g.us`;
+};
+
+export type DailyQuotes = {
+  bot: WASocket;
+  logger: Logger;
+};

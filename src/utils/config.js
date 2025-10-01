@@ -11,3 +11,12 @@ try {
 } catch (err) {
   console.error(logError("Error loading config file"));
 }
+
+/** @type {Record<`${string}@g.us`, string>} */
+export const validGroups = {};
+config.rules.validGroups.map((group) => {
+  const groupJid = Object.keys(group)[0];
+  const groupName = group[groupJid];
+
+  validGroups[groupJid] = groupName;
+});
