@@ -17,7 +17,7 @@ async function getRandomQuote() {
 }
 
 function centerAlign(len, longest, line, lines) {
-  return 4 + Math.floor((longest - len) / 2);
+  return 3 + Math.floor((longest - len) / 2);
 }
 
 // Fungsi kirim quotes ke grup
@@ -32,9 +32,8 @@ async function sendDailyQuote({ bot, groupJid, logger }) {
 
   const quotesContent = align(`*${content}*\n\n~ _${author}_ ~`, centerAlign);
 
-  const quotesTemplate = `
-· · ─────── ❖ ─────── · ·
- ✨ *Petuah Hari Ini* ✨
+  const quotesTemplate = `· · ─────── ❖ ─────── · ·
+✨ *Petuah Hari Ini* ✨
 
 ${quotesContent} ❞
 
@@ -57,7 +56,14 @@ export function doDailyQuotes({ bot, logger }) {
   for (const [groupJid, groupName] of Object.entries(validGroups)) {
     logger.info(`Scheduling daily quote for group: ${groupName}`);
     schedule(
-      "*/1 * * * *",
+      "0 6 * * *",
+      async () => await sendDailyQuote({ bot, groupJid, logger }),
+      {
+        timezone: "Asia/Jakarta",
+      },
+    );
+    schedule(
+      "0 19 * * *",
       async () => await sendDailyQuote({ bot, groupJid, logger }),
       {
         timezone: "Asia/Jakarta",

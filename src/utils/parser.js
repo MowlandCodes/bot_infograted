@@ -2,7 +2,6 @@ import { commandHelp } from "#commands/help";
 import { commandTagAll } from "#commands/tag_all";
 import { config } from "#utils/config";
 import NodeCache from "node-cache";
-import { sendDailyQuote } from "#utils/quotes";
 
 const cooldowns = new NodeCache({ stdTTL: 60 });
 

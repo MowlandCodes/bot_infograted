@@ -28,10 +28,9 @@ export const startBot = async () => {
 
   console.log(
     logInfo(
-      `Using baileys v${version.join(".")} ${
-        isLatest ? chalk.green("(latest)") : chalk.red("(outdated)")
-      }`
-    ) + "\n"
+      `Using baileys v${version.join(".")} ${isLatest ? chalk.green("(latest)") : chalk.red("(outdated)")
+      }`,
+    ) + "\n",
   );
 
   const bot = makeWASocket({
@@ -72,11 +71,7 @@ export const startBot = async () => {
   handleIncomingMessage({ bot, logger });
 
   // Daily Quotes
-  // doDailyQuotes({ bot, logger });
-  await delay(5000);
-  await bot.sendMessage("120363404034113965@g.us", {
-    text: "=================================",
-  });
+  doDailyQuotes({ bot, logger });
 };
 
 startBot();
