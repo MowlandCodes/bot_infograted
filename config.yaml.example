@@ -1,0 +1,24 @@
+owner:
+  - name: "Your Name"
+    github: "https://github.com/your-github"
+    motto: "Your Motto"
+  - name: "Your Name"
+    github: "https://github.com/your-github"
+    motto: "Your Motto"
+
+bot:
+  name: "Bot Infograted" # Bot Name
+  online: true # Make the bot online when running
+  commandPrefix: "!" # Command Prefix to give command to the bot
+  syncHistory: false # Sync message history
+  phoneNumber: 6281234567890 # With country code, ex. 6281234567890
+
+rules:
+  validGroups:
+    - "123456789345678940@g.us": "Group Name 1"
+    - "123456342345623456@g.us": "Group Name 2"
+  cooldownTime: 20 # Cooldown for command in seconds
+
+logger:
+  level: "info" # Logging level
+  logDir: "./logs" # Log directory name
