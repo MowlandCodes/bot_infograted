@@ -43,5 +43,8 @@
     "#commands/*": "./src/commands/*.js",
     "#types/*": "./src/types/*.d.ts",
     "#src/*": "./src/*.js"
+  },
+  "devDependencies": {
+    "pm2": "^6.0.13"
   }
 }
