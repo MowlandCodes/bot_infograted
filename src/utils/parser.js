@@ -1,5 +1,6 @@
 import { commandHelp } from "#commands/help";
 import { commandTagAll } from "#commands/tag_all";
+import { commandOwner } from "#commands/owner";
 import { config } from "#utils/config";
 import NodeCache from "node-cache";
 
@@ -26,11 +27,15 @@ export const commandParser = async ({
 
   switch (command) {
     case "help":
-      await commandHelp({ bot, text, logger, senderJid });
+      await commandHelp({ bot, text, logger, senderJid, messageObj });
       break;
 
     case "tagall":
       await commandTagAll({ bot, text, logger, senderJid, messageObj });
+      break;
+
+    case "owner":
+      await commandOwner({ bot, text, logger, senderJid, messageObj });
       break;
 
     default:

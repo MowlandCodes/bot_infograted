@@ -1,3 +1,11 @@
+owner:
+  - name: "Mowland Codes"
+    github: "https://github.com/MowlandCodes"
+    motto: "Jangan mau di perkaos ama Mikocok 🤫🤫🤫"
+  - name: "Shahan Syah"
+    github: "https://github.com/shahansyah"
+    motto: "Ntah lah"
+
 bot:
   name: "Bot Infograted" # Bot Name
   online: true # Make the bot online when running

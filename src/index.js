@@ -5,7 +5,6 @@ import {
   makeCacheableSignalKeyStore,
   isJidBroadcast,
   Browsers,
-  delay,
 } from "baileys";
 import NodeCache from "node-cache";
 import { pino } from "pino";

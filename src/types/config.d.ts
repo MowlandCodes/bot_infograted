@@ -1,4 +1,9 @@
 export type Config = {
+  owner: {
+    name: string;
+    github: string;
+    motto: string;
+  }[];
   bot: {
     name: string;
     online: boolean;
