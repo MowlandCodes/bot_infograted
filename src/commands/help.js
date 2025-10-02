@@ -9,13 +9,13 @@ export const commandHelp = async ({ bot, text, logger, senderJid }) => {
   if (!text) return;
   logger.info("Sending help message...");
 
-  const helpMessage = `*───「 🤖 BOT Infograted Help Menu 🤖 」───*
+  const helpMessage = `*「 🤖 BOT Infograted Help Menu 🤖 」*
 
 Woi, mahluk digital. Katanya anak IT, masa pake bot aja butuh \`!help\` ? Yaudah nih, gua kasih contekan biar lu gak keliatan gaptek - gaptek amat di depan anak - anak.
 
 Simpen, pahami, jangan nanya lagi. Capek gua.
 
-›────────── ⋆⋅☆⋅⋆ ──────────‹
+›────── ⋆⋅☆⋅⋆ ──────‹
 
 ╭─╌「 📜 *DAFTAR PERINTAH* 」╌─╮
 │
@@ -31,9 +31,13 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 │ 🖥️ *Khusus Anak IT*
 │   ├ • \`${config.bot.commandPrefix}nmap [host]\` ❌ - Nge - scan port target, jangan dipake buat yang aneh - aneh, dosa tanggung sendiri.
 │   ├ • \`${config.bot.commandPrefix}whois [domain]\` ❌ - Stalking informasi domain orang.
-│   ├ • \`${config.bot.commandPrefix}cve [CVE - ID]\` ❌ - Nyari detail kerentanan. Biar keliatan pinter dikit.
+│
+│ 👨🏻‍💻 *Khusus Admin Grup*
+│   ├ • \`${config.bot.commandPrefix}antitoxic\` ❌ - Toggle on/off anti toxic.
+│   ├ • \`${config.bot.commandPrefix}antispam\` ❌ - Toggle on/off anti spam.
+│   ├ • \`${config.bot.commandPrefix}ban [nomor_target]\` ❌ - Ban nomor target dari obrolan grup
 │  
-╰─╌「 ✨ Command Lainnya Cek Sendiri ✨ 」╌─╯
+╰─╌「 ✨ *PLEASE JGN KYK BOCIL NGE SPAM* ✨ 」╌─╯
 
 ›────────── ⋆⋅☆⋅⋆ ──────────‹
 
