@@ -4,6 +4,7 @@ import { config } from "#utils/config";
 import NodeCache from "node-cache";
 
 const cooldowns = new NodeCache({ stdTTL: 60 });
+const cooldownTime = config.rules.cooldownTime * 1000; // convert milliseconds to seconds
 
 /**
  * @param {import("#types/parser").CommandParser}
@@ -57,10 +58,11 @@ export const messageParser = async ({
   if (text.includes("@everyone")) {
     const key = senderJid; // cooldown per grup
     const now = Date.now();
+
+    /** @type {number} */
     const lastUsed = cooldowns.get(key) || 0;
 
-    if (now - lastUsed < 30_000) {
-      // 30 detik
+    if (now - lastUsed < cooldownTime) {
       logger.warn("Tag all ignored: still on cooldown");
       await bot.sendMessage(senderJid, {
         text: "⚠️ *Tag all ignored*: _still on cooldown_ ⚠️",

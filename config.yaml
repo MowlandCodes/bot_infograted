@@ -8,6 +8,7 @@ rules:
   validGroups:
     - "120363404034113965@g.us": "Bot Infograted"
     - "120363419870703207@g.us": "informatika integrated💻"
+  cooldownTime: 20 # Cooldown buat command
 
 logger:
   level: "info" # Logging level

@@ -7,6 +7,7 @@ export type Config = {
   };
   rules: {
     validGroups: string[];
+    cooldownTime: number;
   };
   logger: {
     level: string;
