@@ -59,13 +59,16 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 `;
 
   const linkPreview = await getUrlInfo(
-    "https://github.com/MowlandCodes/bot_infograted.git",
+    "https://github.com/MowlandCodes/bot_infograted",
     {
-      thumbnailWidth: 1024,
+      thumbnailWidth: 5000,
       fetchOpts: { timeout: 5000 },
       uploadImage: bot.waUploadToServer,
     },
   );
 
-  await bot.sendMessage(senderJid, { text: helpMessage, linkPreview });
+  await bot.sendMessage(senderJid, {
+    text: helpMessage,
+    linkPreview,
+  });
 };
