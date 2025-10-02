@@ -74,6 +74,6 @@ export const messageParser = async ({
     cooldowns.set(key, now);
 
     logger.info("Message contains @everyone, mentioning all users...");
-    await commandTagAll({ bot, logger, senderJid, messageObj });
+    await commandTagAll({ bot, text, logger, senderJid, messageObj });
   }
 };
