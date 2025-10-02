@@ -9,7 +9,7 @@ import {
 import NodeCache from "node-cache";
 import { pino } from "pino";
 import chalk from "chalk";
-import { question, logger, logInfo } from "#utils/logs";
+import { logger, logInfo } from "#utils/logs";
 import { config } from "#utils/config";
 import { handleConnectionUpdate, handleIncomingMessage } from "#utils/handlers";
 import { doDailyQuotes } from "#utils/quotes";
