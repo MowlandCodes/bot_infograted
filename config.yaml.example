@@ -1,3 +1,4 @@
+environment: "development" # Environment
 owner:
   - name: "Your Name"
     github: "https://github.com/your-github"

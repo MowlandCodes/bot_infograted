@@ -1,4 +1,5 @@
 export type Config = {
+  environment: "development" | "production";
   owner: {
     name: string;
     github: string;
