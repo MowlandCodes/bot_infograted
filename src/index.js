@@ -48,11 +48,14 @@ export const startBot = async () => {
     cachedGroupMetadata: async (jid) => groupMetadataCache.get(jid),
   });
 
-  // Check connection, if not connected ask for phone number
-  if (!bot.authState.creds.registered) {
-    const phoneNumber = await question(
-      logInfo("Enter your phone number (format: 628xxxxxxxxxxx) => "),
-    );
+  // Check connection, if not connected fetch phone number from config
+  if (!bot?.authState?.creds?.registered) {
+    const phoneNumber = config.bot?.phoneNumber || false;
+
+    if (!phoneNumber) {
+      logger.error("No phone number found in config");
+      process.exit(1);
+    }
 
     setTimeout(async () => {
       let pairingCode = await bot.requestPairingCode(phoneNumber);

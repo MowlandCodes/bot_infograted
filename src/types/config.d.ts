@@ -9,6 +9,7 @@ export type Config = {
     online: boolean;
     commandPrefix: string;
     syncHistory: boolean;
+    phoneNumber: string;
   };
   rules: {
     validGroups: string[];
