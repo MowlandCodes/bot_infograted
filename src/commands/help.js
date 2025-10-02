@@ -1,5 +1,4 @@
 import { config } from "#utils/config";
-import { getUrlInfo } from "baileys";
 
 /**
  * @param {import("#types/handlers").CommandHandler}
@@ -35,7 +34,7 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 │ 👨🏻‍💻 *Khusus Admin Grup*
 │   ├ • \`${config.bot.commandPrefix}antitoxic\` ❌ - Toggle on/off anti toxic.
 │   ├ • \`${config.bot.commandPrefix}antispam\` ❌ - Toggle on/off anti spam.
-│   ├ • \`${config.bot.commandPrefix}ban [nomor_target]\` ❌ - Ban nomor target dari obrolan grup
+│   ├ • \`${config.bot.commandPrefix}ban [nomor_target] [duration_seconds]\` ❌ - Ban nomor target dari obrolan grup
 │  
 ╰─╌「 ✨ *PLEASE JGN KYK BOCIL NGE SPAM* ✨ 」╌─╯
 
@@ -62,17 +61,8 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 * *Open for collaboration at \`https://github.com/MowlandCodes/bot_infograted\`*
 `;
 
-  const linkPreview = await getUrlInfo(
-    "https://github.com/MowlandCodes/bot_infograted",
-    {
-      thumbnailWidth: 5000,
-      fetchOpts: { timeout: 5000 },
-      uploadImage: bot.waUploadToServer,
-    },
-  );
-
   await bot.sendMessage(senderJid, {
-    text: helpMessage,
-    linkPreview,
+    image: { url: "./src/assets/bot_foto.png" },
+    caption: helpMessage,
   });
 };
