@@ -5,7 +5,7 @@ import { config } from "#utils/config";
 import NodeCache from "node-cache";
 
 const cooldowns = new NodeCache({ stdTTL: 60 });
-const cooldownTime = config.rules.cooldownTime * 1000; // convert milliseconds to seconds
+const cooldownTime = config.rules?.cooldownTime * 1000; // convert milliseconds to seconds
 
 /**
  * @param {import("#types/parser").CommandParser}
