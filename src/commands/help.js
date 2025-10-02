@@ -22,7 +22,7 @@ Simpen, pahami, jangan nanya lagi. Capek gua.
 │ 🤖 *Umum*
 │   ├ • \`${config.bot.commandPrefix}help\` ✅ - Nampilin pesan ini lagi(buat yang memorinya setara RAM 128MB).
 │   ├ • \`${config.bot.commandPrefix}tagall\` ✅ - Men-tag seluruh anggota grup.
-│   ├ • \`${config.bot.commandPrefix}owner\` ❌ - Ngasih tau siapa majikan bot ini yang harus lu salahin kalo ada error.
+│   ├ • \`${config.bot.commandPrefix}owner\` ✅ - Ngasih tau siapa majikan bot ini yang harus lu salahin kalo ada error.
 │  
 │ 🛠️ *Tools & Utility*
 │   ├ • \`${config.bot.commandPrefix}ytmp3 [link]\` ❌ - Download audio dari YouTube.
