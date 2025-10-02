@@ -12,7 +12,7 @@ export const commandOwner = async ({ bot, logger, senderJid, messageObj }) => {
     logger.info("Bot ini tidak punya owner...");
 
     await bot.sendMessage(senderJid, {
-      text: "*Bot ini anak yatim piatu guys, gak punya owner. 😢😢*",
+      text: "*Bot ini anak yatim piatu guys, gak punya owner. 😢*",
     });
   }
 
