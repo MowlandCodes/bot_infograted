@@ -16,6 +16,7 @@ import { doDailyQuotes } from "#utils/quotes";
 
 const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
+const mediaCache = new NodeCache({ stdTTL: 60, useClones: false });
 
 /**
  * Start bot connection to Whatsapp
@@ -46,6 +47,8 @@ export const startBot = async () => {
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     syncFullHistory: config.bot?.syncHistory ?? false,
     cachedGroupMetadata: async (jid) => groupMetadataCache.get(jid),
+    mediaCache,
+    enableAutoSessionRecreation: true,
   });
 
   // Check connection, if not connected fetch phone number from config
