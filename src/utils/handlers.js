@@ -91,10 +91,10 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
 
     /** @type {boolean} */
     const isBotMentioned =
-      latestMessage?.message?.extendedTextMessage?.contextInfo?.mentionedJid.includes(
+      latestMessage?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(
         botJid,
       ) ||
-      latestMessage?.message?.extendedTextMessage?.contextInfo?.mentionedJid.includes(
+      latestMessage?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(
         botLid,
       ); // Mention nya bisa pake JID atau LID
 
