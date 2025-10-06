@@ -1,4 +1,10 @@
-import { isJidBot, isJidGroup, DisconnectReason, delay } from "baileys";
+import {
+  isJidBot,
+  isJidGroup,
+  DisconnectReason,
+  delay,
+  jidNormalizedUser,
+} from "baileys";
 import { Boom } from "@hapi/boom";
 
 import { startBot } from "#src/index";
@@ -29,6 +35,25 @@ async function getGroupName(bot, groupJid) {
 }
 
 /**
+ * @param {import("#types/handlers").IsBotAdmin}
+ * @returns {Promise<boolean>}
+ */
+export const isBotAdmin = async ({ bot, groupJid, botJid }) => {
+  try {
+    const groupMetadata = await bot.groupMetadata(groupJid);
+
+    const participant = groupMetadata?.participants.find(
+      (participant) => participant.id === botJid,
+    );
+
+    return participant?.isAdmin || participant?.isSuperAdmin || false;
+  } catch (error) {
+    logger.error(`Error checking if bot is admin: ${error}`);
+    return false;
+  }
+};
+
+/**
  * @param {import("#types/handlers").Handler}
  * @returns Promise<void>
  */
@@ -48,10 +73,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
       "";
 
     /** @type {`${string}@s.whatsapp.net` | null} */
-    const botJid = bot.authState?.creds?.me?.id
-      ? bot.authState?.creds?.me?.id?.split("@")[0].split(":")[0] +
-      "@s.whatsapp.net"
-      : null;
+    const botJid = jidNormalizedUser(bot.authState?.creds?.me?.id);
 
     /** @type {`${string}@lid` | null} */
     const botLid = bot.authState?.creds?.lid
@@ -59,8 +81,10 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
       : null;
 
     /** @type {string} */
-    const senderJid =
-      latestMessage?.key?.remoteJid || latestMessage?.key?.participant;
+    const senderJid = latestMessage?.key?.remoteJid;
+
+    /** @type {string?} */
+    const senderName = latestMessage?.pushName;
 
     /** @type {boolean} */
     const isBot = isJidBot(senderJid);
@@ -98,16 +122,20 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
         botLid,
       ); // Mention nya bisa pake JID atau LID
 
+    let isAdmin = false;
+    if (isGroup && isValidGroup) {
+      isAdmin = await isBotAdmin({ bot, groupJid, botJid });
+    }
+
     if (isBot) {
       logger.warn("Received message from a bot, ignoring...");
       return; // Ignore message from bot
     }
 
-    // Jangan di pake dulu buat development sekarang... Ntar aja pas udh mau release
-    // if (isFromMe) {
-    //   logger.warn("Received message from yourself, ignoring...");
-    //   return; // Ignore message from yourself
-    // }
+    if (config.environment === "production" && isFromMe) {
+      logger.warn("Received message from yourself, ignoring...");
+      return; // Ignore message from yourself
+    }
 
     // Command di terima kalo:
     // 1. Dateng dari grup yang valid
@@ -115,7 +143,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     // 3. Command harus valid
     if (isCommand && isValidGroup /* && isBotMentioned */) {
       logger.info(
-        `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
+        `Message received from ${senderName} in group ${groupName}: ${messageText}`,
       );
       // Parse command and execute function according to the command
       await commandParser({
@@ -131,7 +159,7 @@ export const handleIncomingMessage = async ({ bot, logger }) => {
     // 1. Dateng dari grup yang valid
     else if (isValidGroup) {
       logger.info(
-        `Message received from ${senderJid} in group ${groupName}: ${messageText}`,
+        `Message received from ${senderName} in group ${groupName}: ${messageText}`,
       );
       await messageParser({
         bot,

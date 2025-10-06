@@ -9,13 +9,14 @@ import {
 import NodeCache from "node-cache";
 import { pino } from "pino";
 import chalk from "chalk";
-import { question, logger, logInfo } from "#utils/logs";
+import { logger, logInfo } from "#utils/logs";
 import { config } from "#utils/config";
 import { handleConnectionUpdate, handleIncomingMessage } from "#utils/handlers";
 import { doDailyQuotes } from "#utils/quotes";
 
 const msgRetryCounterCache = new NodeCache({ stdTTL: 60 });
 const groupMetadataCache = new NodeCache({ stdTTL: 60, useClones: false });
+const mediaCache = new NodeCache({ stdTTL: 60, useClones: false });
 
 /**
  * Start bot connection to Whatsapp
@@ -46,13 +47,18 @@ export const startBot = async () => {
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     syncFullHistory: config.bot?.syncHistory ?? false,
     cachedGroupMetadata: async (jid) => groupMetadataCache.get(jid),
+    mediaCache,
+    enableAutoSessionRecreation: true,
   });
 
-  // Check connection, if not connected ask for phone number
-  if (!bot.authState.creds.registered) {
-    const phoneNumber = await question(
-      logInfo("Enter your phone number (format: 628xxxxxxxxxxx) => "),
-    );
+  // Check connection, if not connected fetch phone number from config
+  if (!bot?.authState?.creds?.registered) {
+    const phoneNumber = config.bot?.phoneNumber || false;
+
+    if (!phoneNumber) {
+      logger.error("No phone number found in config");
+      process.exit(1);
+    }
 
     setTimeout(async () => {
       let pairingCode = await bot.requestPairingCode(phoneNumber);

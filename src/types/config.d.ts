@@ -1,4 +1,5 @@
 export type Config = {
+  environment: "development" | "production";
   owner: {
     name: string;
     github: string;
@@ -9,6 +10,7 @@ export type Config = {
     online: boolean;
     commandPrefix: string;
     syncHistory: boolean;
+    phoneNumber: string;
   };
   rules: {
     validGroups: string[];

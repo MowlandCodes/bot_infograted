@@ -21,3 +21,9 @@ export type DailyQuotes = {
   bot: WASocket;
   logger: Logger;
 };
+
+export type IsBotAdmin = {
+  bot: WASocket;
+  groupJid: `${number}@g.us`;
+  botJid: `${number}@s.whatsapp.net` | `${number}@lid`;
+};
