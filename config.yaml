@@ -1,0 +1,23 @@
+owner:
+  - name: "Mowland Codes"
+    github: "https://github.com/MowlandCodes"
+    motto: "Jangan mau di perkaos ama Mikocok 🤫🤫🤫"
+  - name: "Shahan Syah"
+    github: "https://github.com/shahansyah"
+    motto: "focus on your goal,not on your fear"
+
+bot:
+  name: "Bot Infograted" # Bot Name
+  online: true # Make the bot online when running
+  commandPrefix: "!" # Command Prefix to give command to the bot
+  syncHistory: false # Sync message history
+
+rules:
+  validGroups:
+    - "120363404034113965@g.us": "Bot Infograted"
+    - "120363419870703207@g.us": "informatika integrated💻"
+  cooldownTime: 20 # Cooldown buat command
+
+logger:
+  level: "info" # Logging level
+  logDir: "./logs" # Log directory name
