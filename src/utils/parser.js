@@ -5,7 +5,42 @@ import { config } from "#utils/config";
 import NodeCache from "node-cache";
 
 const cooldowns = new NodeCache({ stdTTL: 60 });
-const cooldownTime = config.rules.cooldownTime * 1000; // convert milliseconds to seconds
+const cooldownTime = config.rules.cooldownTime * 1000; // convert seconds to ms
+
+// 🧩 Daftar kata toxic (bisa kamu tambah sesuka hati)
+const toxicWords = [
+  "kontol",
+  "anjing",
+  "goblok",
+  "tolol",
+  "babi",
+  "bangsat",
+  "memek",
+  "ngentot",
+  "idiot",
+  "bajingan",
+  "brengsek",
+  "sialan",
+  "kampret",
+  "asu",
+  "tai",
+  "bego",
+  "pantek",
+  "perek",
+  "pepek",
+  "jancok",
+  "jancuk",
+  "j4nc0k",
+  "b4b1",
+  "b4ngsat",
+  "b4j1ngan",
+];
+
+// 🧠 Fungsi untuk deteksi kata toxic
+function isToxic(text) {
+  const lower = text.toLowerCase();
+  return toxicWords.some((word) => lower.includes(word));
+}
 
 /**
  * @param {import("#types/parser").CommandParser}
@@ -60,11 +95,32 @@ export const messageParser = async ({
     return;
   }
 
+  // 🚫 Anti Toxic + Auto Delete
+  if (isToxic(text)) {
+    logger.warn(`Pesan toxic terdeteksi dari ${senderJid}`);
+
+    // 🔥 Hapus pesan otomatis
+    await bot.sendMessage(senderJid, {
+      delete: {
+        remoteJid: senderJid,
+        fromMe: false,
+        id: messageObj.key.id,
+        participant: messageObj.key.participant || senderJid,
+      },
+    });
+
+    // ⚠️ Kirim peringatan
+    await bot.sendMessage(senderJid, {
+      text: "🚫 Pesanmu otomatis dihapus karena mengandung kata toxic. Mohon jaga bahasa 🙏",
+    });
+
+    return; // stop supaya gak lanjut ke bawah
+  }
+
+  // ⛔ Anti Spam (Tagall cooldown)
   if (text.includes("@everyone")) {
     const key = senderJid; // cooldown per grup
     const now = Date.now();
-
-    /** @type {number} */
     const lastUsed = cooldowns.get(key) || 0;
 
     if (now - lastUsed < cooldownTime) {
@@ -75,7 +131,7 @@ export const messageParser = async ({
       return;
     }
 
-    // Caching cooldown
+    // Simpan waktu terakhir @everyone
     cooldowns.set(key, now);
 
     logger.info("Message contains @everyone, mentioning all users...");
